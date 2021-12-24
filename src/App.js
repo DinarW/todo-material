@@ -22,9 +22,11 @@ const reducer = (state, action) => {
     case 'DELETE_ALL':
       return [];
     case 'CHECKED_ALL':
-      const checkedTasks = state.filter((obj) => obj.checked);  // самая простая реализация, но по оптимизации, как я понимаю, не очень
-      const isAllChecked = checkedTasks.length === state.length;// можно было бы ввести два флага, каждый бы следил какой чекед у добавляемой задачи
-      return state.map((task) => ({ ...task, checked: !isAllChecked })); // но наверное тут это неуместно :/
+      const countCheckedTasks = state.reduce((counter, obj) => 
+        obj.checked ? counter + 1 : counter
+      ,0);
+      const isAllChecked = countCheckedTasks === state.length;
+      return state.map((task) => ({ ...task, checked: !isAllChecked }));
     default:
       return state;
   }
