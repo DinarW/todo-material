@@ -5,11 +5,9 @@ import { Item } from './components/Item';
 
 const reducer = (state, action) => {
   if (action.type === 'ADD_TASK') {
-    const { text, checked } = action.item;
-    const id = state.length ? state[state.length - 1].id + 1 : 0;
     return [
       ...state,
-      { id, text, checked }
+      { ...action.item, id: state.length ? state[state.length - 1].id + 1 : 1 },
     ];
   }
 
