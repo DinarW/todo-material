@@ -4,18 +4,17 @@ import { AddField } from './components/AddField';
 import { Item } from './components/Item';
 
 const reducer = (state, action) => {
-  if (action.type === 'ADD_TASK') {
-    return [
-      ...state,
-      { ...action.payload, id: state.length ? state[state.length - 1].id + 1 : 1 },
-    ];
+  switch (action.type) {
+    case 'ADD_TASK':
+      return [
+        ...state,
+        { ...action.payload, id: state.length ? state[state.length - 1].id + 1 : 1 },
+      ];
+    case 'DELETE_TASK':
+      return state.filter((task) => task.id !== action.payload);
+    default:
+      return state;
   }
-
-  if (action.type === 'DELETE_TASK') {
-    return state.filter((task) => task.id !== action.payload);
-  }
-
-  return state;
 };
 
 function App() {
