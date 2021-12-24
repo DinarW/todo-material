@@ -4,14 +4,17 @@ import { AddField } from './components/AddField';
 import { Item } from './components/Item';
 
 const reducer = (state, action) => {
-  if (action.type === 'ADD_TASK') {
-    return [
-      ...state,
-      { ...action.payload, id: state.length ? state[state.length - 1].id + 1 : 1 },
-    ];
+  switch (action.type) {
+    case 'ADD_TASK':
+      return [
+        ...state,
+        { ...action.payload, id: state.length ? state[state.length - 1].id + 1 : 1 },
+      ];
+    case 'DELETE_TASK':
+      return state.filter((task) => task.id !== action.payload);
+    default:
+      return state;
   }
-
-  return state;
 };
 
 function App() {
@@ -23,6 +26,13 @@ function App() {
       payload: obj,
     })
   }
+
+  const deleteTask = (id) => {
+    dispatch({
+      type: 'DELETE_TASK',
+      payload: id,
+    });
+  };
 
   return (
     <div className="App">
@@ -41,7 +51,11 @@ function App() {
         <List>
           { state.map((obj) => {
             return (
-              <Item key={obj.id} text={obj.text} isChecked={obj.checked} />  
+              <Item 
+                key={obj.id}
+                task={obj}
+                onDelete={deleteTask}
+              />  
             )
           }) }
         </List>
