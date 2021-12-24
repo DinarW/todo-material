@@ -6,7 +6,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-export const Item = ({ text, isChecked }) => {
+export const Item = ({ text, isChecked, onDelete }) => {
   const [isCheckedItem, setIsCheckedItem] = React.useState(isChecked);
 
   return (
@@ -23,7 +23,7 @@ export const Item = ({ text, isChecked }) => {
           <IconButton>
             <EditIcon style={{ fontSize: 20 }} />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={onDelete} >
             <DeleteOutlineIcon style={{ fontSize: 20 }} />
           </IconButton>
         </div>
