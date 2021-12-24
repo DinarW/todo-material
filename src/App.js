@@ -56,7 +56,8 @@ function App() {
                 key={obj.id}
                 text={obj.text}
                 isChecked={obj.checked} 
-                onDelete={() => deleteTask(obj.id)}
+                id={obj.id}
+                onDelete={deleteTask}
               />  
             )
           }) }
