@@ -7,7 +7,7 @@ const reducer = (state, action) => {
   if (action.type === 'ADD_TASK') {
     return [
       ...state,
-      { ...action.item, id: state.length ? state[state.length - 1].id + 1 : 1 },
+      { ...action.payload, id: state.length ? state[state.length - 1].id + 1 : 1 },
     ];
   }
 
@@ -20,7 +20,7 @@ function App() {
   const addTask = (obj) => {
     dispatch({
       type: 'ADD_TASK',
-      item: obj,
+      payload: obj,
     })
   }
 
