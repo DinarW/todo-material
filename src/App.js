@@ -12,6 +12,19 @@ const reducer = (state, action) => {
       ];
     case 'DELETE_TASK':
       return state.filter((task) => task.id !== action.payload);
+    case 'TOGGLE_TASK':
+      return state.map((task) => {
+        if (task.id === action.payload) {
+          return { ...task, checked: !task.checked };
+        }
+        return task;
+      });
+    case 'DELETE_ALL':
+      return [];
+    case 'CHECKED_ALL':
+      const checkedTasks = state.filter((obj) => obj.checked);  // самая простая реализация, но по оптимизации, как я понимаю, не очень
+      const isAllChecked = checkedTasks.length === state.length;// можно было бы ввести два флага, каждый бы следил какой чекед у добавляемой задачи
+      return state.map((task) => ({ ...task, checked: !isAllChecked })); // но наверное тут это неуместно :/
     default:
       return state;
   }
@@ -31,6 +44,25 @@ function App() {
     dispatch({
       type: 'DELETE_TASK',
       payload: id,
+    });
+  };
+
+  const toggleComplete = (id) => {
+    dispatch({
+      type: 'TOGGLE_TASK',
+      payload: id,
+    });
+  };
+
+  const deleteAllTasks = () => {
+    dispatch({
+      type: 'DELETE_ALL',
+    });
+  }
+
+  const checkedAllTasks = () => {
+    dispatch({
+      type: 'CHECKED_ALL',
     });
   };
 
@@ -54,6 +86,7 @@ function App() {
               <Item 
                 key={obj.id}
                 task={obj}
+                onClickCheckbox={() => toggleComplete(obj.id)}
                 onDelete={deleteTask}
               />  
             )
@@ -61,8 +94,8 @@ function App() {
         </List>
         <Divider />
         <div className="check-buttons">
-          <Button>Отметить всё</Button>
-          <Button>Очистить</Button>
+          <Button onClick={checkedAllTasks}>Отметить всё</Button>
+          <Button onClick={deleteAllTasks}>Очистить</Button>
         </div>
       </Paper>
     </div>
