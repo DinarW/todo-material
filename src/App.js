@@ -54,9 +54,7 @@ function App() {
             return (
               <Item 
                 key={obj.id}
-                text={obj.text}
-                isChecked={obj.checked} 
-                id={obj.id}
+                task={obj}
                 onDelete={deleteTask}
               />  
             )
