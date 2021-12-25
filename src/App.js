@@ -3,37 +3,66 @@ import { Paper, Divider, Button, List, Tabs, Tab } from '@mui/material';
 import { AddField } from './components/AddField';
 import { Item } from './components/Item';
 
+const filtered = ['all', 'active', 'complited'];
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TASK':
-      return [
+      return {
         ...state,
-        { ...action.payload, id: state.length ? state[state.length - 1].id + 1 : 1 },
-      ];
+        tasks: [
+          ...state.tasks,
+          { ...action.payload, id: state.tasks.length ? state.tasks[state.tasks.length - 1].id + 1 : 1 }
+        ]
+      };
     case 'DELETE_TASK':
-      return state.filter((task) => task.id !== action.payload);
+      return {
+        ...state,
+        tasks: state.tasks.filter((task) => task.id !== action.payload),
+      };
     case 'TOGGLE_TASK':
-      return state.map((task) => {
-        if (task.id === action.payload) {
-          return { ...task, checked: !task.checked };
-        }
-        return task;
-      });
+      return {
+        ...state,
+        tasks: state.tasks.map((task) => 
+          task.id === action.payload ? { ...task, checked: !task.checked } : task
+        ),
+      }
     case 'DELETE_ALL':
-      return [];
+      return {
+        ...state,
+        tasks: [],
+      };
     case 'CHECKED_ALL':
-      const countCheckedTasks = state.reduce((counter, obj) => 
+      const countCheckedTasks = state.tasks.reduce((counter, obj) => 
         obj.checked ? counter + 1 : counter
       ,0);
-      const isAllChecked = countCheckedTasks === state.length;
-      return state.map((task) => ({ ...task, checked: !isAllChecked }));
+      const isAllChecked = countCheckedTasks === state.tasks.length;
+      return {
+        ...state,
+        tasks: state.tasks.map((task) => ({ ...task, checked: !isAllChecked })),
+      };
+    case 'SET_FILTER':
+      return {
+        ...state,
+        filterBy: filtered[action.payload],
+      };
+    case 'EDIT_TASK':
+      return {
+        ...state,
+        tasks: state.tasks.map((task) => 
+          task.id === action.payload.id ? action.payload : task
+        ),
+      };
     default:
       return state;
-  }
+  };
 };
 
 function App() {
-  const [state, dispatch] = React.useReducer(reducer, [])
+  const [state, dispatch] = React.useReducer(reducer, {
+    filterBy: 'all',
+    tasks: [],
+  });
 
   const addTask = (obj) => {
     dispatch({
@@ -57,14 +86,30 @@ function App() {
   };
 
   const deleteAllTasks = () => {
-    dispatch({
-      type: 'DELETE_ALL',
-    });
+    if (window.confirm('Вы уверены, что хотите удалить все задачи?')) {
+      dispatch({
+        type: 'DELETE_ALL',
+      });
+    }
   }
 
   const checkedAllTasks = () => {
+      dispatch({
+        type: 'CHECKED_ALL',
+      });
+  };
+
+  const handleFilterTasks = (_, newValue) => {
     dispatch({
-      type: 'CHECKED_ALL',
+      type: 'SET_FILTER',
+      payload: newValue,
+    });
+  };
+
+  const editTaskItem = (editedItem) => {
+    dispatch({
+      type: 'EDIT_TASK',
+      payload: editedItem,
     });
   };
 
@@ -76,19 +121,31 @@ function App() {
         </Paper>
         <AddField clickAddTask={addTask} />
         <Divider />
-        <Tabs value={0}>
+        <Tabs onChange={handleFilterTasks} value={filtered.indexOf(state.filterBy)}>
           <Tab label="Все" />
           <Tab label="Активные" />
           <Tab label="Завершённые" />
         </Tabs>
         <Divider />
         <List>
-          { state.map((obj) => {
+          { state.tasks
+          .filter((obj) => {
+            switch (state.filterBy) {
+              case 'active':
+                return !obj.checked;
+              case 'complited':
+                return obj.checked;
+              default:
+                return true;
+            }
+          })
+          .map((obj) => {
             return (
-              <Item 
+              <Item
                 key={obj.id}
                 task={obj}
                 onClickCheckbox={() => toggleComplete(obj.id)}
+                onClickEdit={editTaskItem}
                 onDelete={deleteTask}
               />  
             )
