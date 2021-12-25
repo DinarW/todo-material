@@ -10,27 +10,6 @@ function App() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
 
-  const addTask = (obj) => {
-    dispatch({
-      type: 'ADD_TASK',
-      payload: obj,
-    })
-  }
-
-  const deleteTask = (id) => {
-    dispatch({
-      type: 'DELETE_TASK',
-      payload: id,
-    });
-  };
-
-  const toggleComplete = (id) => {
-    dispatch({
-      type: 'TOGGLE_TASK',
-      payload: id,
-    });
-  };
-
   const deleteAllTasks = () => {
     if (window.confirm('Вы уверены, что хотите удалить все задачи?')) {
       dispatch({
@@ -40,15 +19,8 @@ function App() {
   }
 
   const checkedAllTasks = () => {
-      dispatch({
-        type: 'CHECKED_ALL',
-      });
-  };
-
-  const editTaskItem = (editedItem) => {
     dispatch({
-      type: 'EDIT_TASK',
-      payload: editedItem,
+      type: 'CHECKED_ALL',
     });
   };
 
@@ -58,7 +30,7 @@ function App() {
         <Paper className="header" elevation={0}>
           <h4>Список задач</h4>
         </Paper>
-        <AddField clickAddTask={addTask} />
+        <AddField />
         <Divider />
         <Filter />
         <Divider />
@@ -79,9 +51,6 @@ function App() {
               <Item
                 key={obj.id}
                 task={obj}
-                onClickCheckbox={() => toggleComplete(obj.id)}
-                onClickEdit={editTaskItem}
-                onDelete={deleteTask}
               />  
             )
           }) }

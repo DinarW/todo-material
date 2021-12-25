@@ -1,18 +1,24 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+
 import { TextField, Button, Checkbox } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-export const AddField = ({ clickAddTask }) => {
+export const AddField = () => {
   const [inputValue, setInputValue] = React.useState('');
   const [isChecked, setIsChecked] = React.useState(false);
+  const dispatch = useDispatch();
 
-  const handleClickAddTask = () => {
-    clickAddTask({
-      text: inputValue,
-      checked: isChecked,
-    });
+  const clickAddTask = () => {
+    dispatch({
+      type: 'ADD_TASK',
+      payload: {
+        text: inputValue,
+        checked: isChecked,
+      },
+    })
     setInputValue('');
     setIsChecked(false);
   };
@@ -33,7 +39,7 @@ export const AddField = ({ clickAddTask }) => {
         variant="standard" 
         fullWidth
       />
-      <Button onClick={handleClickAddTask} >
+      <Button onClick={clickAddTask} >
         <AddIcon />
       </Button>
     </div>

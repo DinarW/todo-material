@@ -1,20 +1,39 @@
 import React from 'react';
-import { IconButton, Checkbox, ListItem, Typography, TextField } from '@mui/material';
+import { useDispatch } from 'react-redux';
 
+import { IconButton, Checkbox, ListItem, Typography, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SaveIcon from '@mui/icons-material/Save';
 
-export const Item = ({ task, onClickCheckbox, onDelete, onClickEdit }) => {
+export const Item = ({ task }) => {
   const [edit, setEdit] = React.useState(true);
   const [editInputValue, setEditInputValue] = React.useState('');
+  const dispatch = useDispatch();
 
   const onClickDelete = () => {
     if (window.confirm('Уверены, что хотите удалить задачу?')) {
-      onDelete(task.id);
+      dispatch({
+        type: 'DELETE_TASK',
+        payload: task.id,
+      });
     }
+  };
+
+  const onClickEdit = (editedItem) => {
+    dispatch({
+      type: 'EDIT_TASK',
+      payload: editedItem,
+    });
+  };
+
+  const onClickCheckbox = () => {
+    dispatch({
+      type: 'TOGGLE_TASK',
+      payload: task.id,
+    });
   };
 
   return (
@@ -38,9 +57,11 @@ export const Item = ({ task, onClickCheckbox, onDelete, onClickEdit }) => {
           <IconButton 
             onClick={() => {
               setEdit(!edit)
+
               if (!editInputValue) {
                 setEditInputValue(task.text);
               }
+
               !edit && onClickEdit({ ...task, text: editInputValue })
             }}
           >
@@ -50,7 +71,7 @@ export const Item = ({ task, onClickCheckbox, onDelete, onClickEdit }) => {
             }
           </IconButton>
           <IconButton onClick={onClickDelete} >
-          <DeleteOutlineIcon style={{ fontSize: 20 }} />
+            <DeleteOutlineIcon style={{ fontSize: 20 }} />
           </IconButton>
         </div>
       </div>
