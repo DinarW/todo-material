@@ -1,9 +1,8 @@
 # Educational project: Todo Material
 
-<h3>install:</h3>
+<h3>Stack:</h3>
 
 ```
-npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
-npm install sass
-npm start
+ReactJS, Redux, React Redux
+MaterialUI, SASS
 ```
