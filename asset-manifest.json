@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/todo-material/static/css/main.346a4dff.css",
+    "main.js": "/todo-material/static/js/main.96f80107.js",
+    "index.html": "/todo-material/index.html",
+    "main.346a4dff.css.map": "/todo-material/static/css/main.346a4dff.css.map",
+    "main.96f80107.js.map": "/todo-material/static/js/main.96f80107.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.346a4dff.css",
+    "static/js/main.96f80107.js"
+  ]
+}
