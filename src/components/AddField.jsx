@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { addTask } from '../redux/actions/tasks';
 
 import { TextField, Button, Checkbox } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,13 +13,7 @@ export const AddField = () => {
   const dispatch = useDispatch();
 
   const clickAddTask = () => {
-    dispatch({
-      type: 'ADD_TASK',
-      payload: {
-        text: inputValue,
-        checked: isChecked,
-      },
-    })
+    dispatch(addTask(inputValue, isChecked));
     setInputValue('');
     setIsChecked(false);
   };

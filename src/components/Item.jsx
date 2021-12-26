@@ -1,5 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { editTask } from '../redux/actions/tasks';
+import { removeTask } from '../redux/actions/tasks';
+import { toggleCompleted } from '../redux/actions/tasks';
 
 import { IconButton, Checkbox, ListItem, Typography, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,25 +18,16 @@ export const Item = ({ task }) => {
 
   const onClickDelete = () => {
     if (window.confirm('Уверены, что хотите удалить задачу?')) {
-      dispatch({
-        type: 'DELETE_TASK',
-        payload: task.id,
-      });
+      dispatch(removeTask(task.id));
     }
   };
 
   const onClickEdit = (editedItem) => {
-    dispatch({
-      type: 'EDIT_TASK',
-      payload: editedItem,
-    });
+    dispatch(editTask(editedItem));
   };
 
   const onClickCheckbox = () => {
-    dispatch({
-      type: 'TOGGLE_TASK',
-      payload: task.id,
-    });
+    dispatch(toggleCompleted(task.id));
   };
 
   return (

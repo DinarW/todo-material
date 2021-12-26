@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { completeAll, clearAll, fetchTasks } from './redux/actions/tasks';
 
 import { Paper, Divider, Button, List } from '@mui/material';
 import { AddField } from './components/AddField';
@@ -10,18 +11,18 @@ function App() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
 
+  React.useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
+
   const deleteAllTasks = () => {
     if (window.confirm('Вы уверены, что хотите удалить все задачи?')) {
-      dispatch({
-        type: 'DELETE_ALL',
-      });
+      dispatch(clearAll());
     }
   }
 
   const checkedAllTasks = () => {
-    dispatch({
-      type: 'CHECKED_ALL',
-    });
+    dispatch(completeAll());
   };
 
   return (
@@ -37,7 +38,7 @@ function App() {
         <List>
           { state.tasks
           .filter((obj) => {
-            switch (state.filterBy) {
+            switch (state.filter.filterBy) {
               case 'active':
                 return !obj.checked;
               case 'complited':
@@ -57,8 +58,18 @@ function App() {
         </List>
         <Divider />
         <div className="check-buttons">
-          <Button onClick={checkedAllTasks}>Отметить всё</Button>
-          <Button onClick={deleteAllTasks}>Очистить</Button>
+          <Button 
+            onClick={checkedAllTasks}
+            disabled={!state.tasks.length} 
+          >
+            Отметить всё
+          </Button>
+          <Button
+            onClick={deleteAllTasks}
+            disabled={!state.tasks.length}
+          >
+            Очистить
+          </Button>
         </div>
       </Paper>
     </div>

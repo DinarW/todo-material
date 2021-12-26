@@ -1,18 +1,16 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Tabs, Tab } from '@mui/material';
+import { setFilter } from '../redux/actions/filter';
 
 const filtered = ['all', 'active', 'complited'];
 
 const Filter = () => {
   const dispatch = useDispatch();
-  const filterBy = useSelector((state) => state.filterBy);
+  const filterBy = useSelector((state) => state.filter.filterBy);
 
   const handlerFilterTasks = (_, newValue) => {
-    dispatch({
-      type: 'SET_FILTER',
-      payload: newValue,
-    });
+    dispatch(setFilter(filtered[newValue]));
   };
 
   return (
